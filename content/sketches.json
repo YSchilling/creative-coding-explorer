@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "title": "2DPerlinNoise",
+      "description": "Hey I am a short description!",
+      "code": "let xoff = 0;\nlet xoffStep = 0.003;\n\np.setup = () => {\n  p.createCanvas(640, 360);\n  p.stroke(255);\n  p.fill(0);\n}\n\np.draw = () => {\n  p.background(0);\n\n  p.beginShape();\n  for (let x = 0; x < p.width / 2; x++) {\n    let noisepara = xoff + x * xoffStep;\n    let y = p.map(p.noise(noisepara), 0, 1, 20, p.height - 20);\n    p.vertex(x, y);\n  }\n  p.endShape();\n\n  xoff += xoffStep;\n}\n",
+      "imgFileName": "2d_perlin_noise.png"
+    },
+    {
+      "title": "Butterfly",
+      "description": "Hey I am a short description!",
+      "code": "// globals\nlet t = 0;\n\n// params\nlet tIncrement = 0.05;\n\np.setup = () => {\n  p.createCanvas(640, 360);\n  p.background(0);\n}\n\np.draw = () => {\n  p.translate(p.width / 2, p.height / 2);\n\n  let v1 = p.createVector(x1(t), y1(t));\n\n  p.stroke(255);\n  p.point(-v1.x, -v1.y);\n\n  t += tIncrement;\n}\n\nfunction x1(t) {\n  return 50 * (p.sin(t) * (p.pow(Math.E, p.cos(t)) - 2*p.cos(4*t) - p.pow(p.sin(t/12), 5)));\n}\n\nfunction y1(t) {\n  return 50 * (p.cos(t) * (p.pow(Math.E, p.cos(t)) - 2*p.cos(4*t) - p.pow(p.sin(t/12), 5)));\n}\n",
+      "imgFileName": "butterfly.png"
+    },
+    {
+      "title": "FadingLines",
+      "description": "Hey I am a short description!",
+      "code": "// globals\nlet t = 0;\n\n// params\nlet tIncrement = 0.05;\n\np.setup = () => {\n  p.createCanvas(640, 360);\n}\n\np.draw = () => {\n  p.translate(p.width / 2, p.height / 2);\n\n  let v1 = p.createVector(x1(t), y1(t));\n  let v2 = p.createVector(x2(t), y2(t));\n\n  p.stroke(255);\n  p.line(v1.x, v1.y, v2.x, v2.y);\n\n  p.stroke(255, 0, 0);\n  p.line(-v1.x, v1.y, -v2.x, v2.y);\n\n  p.background(0, 10);\n\n  t += tIncrement;\n}\n\nfunction x1(t) {\n  return 30 * p.sin(t) + 20 * p.cos(t);\n}\n\nfunction y1(t) {\n  return 30 * p.cos(t) + 40 * p.sin(2 * t);\n}\n\nfunction x2(t) {\n  return p.sin(4 * t) + 100 * p.cos(t);\n}\n\nfunction y2(t) {\n  return 3 * p.cos(0.1 * t);\n}\n",
+      "imgFileName": "fading_lines.png"
+    },
+    {
+      "title": "CrazyDots",
+      "description": "Hey I am a short description!",
+      "code": "let dots = [];\nlet nDots = 100;\n\np.setup = () => {\n  p.createCanvas(640, 360);\n  p.background(0);\n  p.stroke(255);\n}\n\np.draw = () => {\n  p.background(0, 10);\n  \n  dots = [];\n  for (let i = 0; i < nDots; i++) {\n    let x = p.random(p.width);\n    let y = p.random(p.height);\n    dots.push(p.createVector(x, y));\n  }\n  \n  displayDots();\n}\n\nfunction displayDots() {\n  for (let i = 0; i < dots.length; i++) {\n    p.ellipse(dots[i].x, dots[i].y, 4, 4);\n  }\n}",
+      "imgFileName": "crazy_dots.png"
+    },
+    {
+      "title": "CrazyLines",
+      "description": "Hey I am a short description!",
+      "code": "let dots = [];\nlet nDots = 100;\nlet xoff = 0;\nlet sn = 0;\n\np.setup = () => {\n  p.createCanvas(640, 360);\n  p.background(0);\n  p.stroke(255);\n  p.fill(0);\n}\n\np.draw = () => {\n  let sn = 0.005 + p.sin(xoff) * 0.005;\n  for (let i = 0; i < 100; i++) {\n    let x = p.random(p.width);\n    let y = p.random(p.height);\n    for (let j = 0; j < 50; j++) {\n      p.point(x, y);\n      x += p.noise(x * sn, y * sn, 0);\n      y += p.noise(x * sn, y * sn, 1);\n    }\n  }\n\n  // draw\n  p.background(0, 10);\n\n  // logic\n  xoff += 0.01;\n}\n",
+      "imgFileName": "crazy_lines.png"
+    },
+    {
+      "title": "Cyclops",
+      "description": "Hey I am a short description!",
+      "code": "x_off = 0;\nx_step = 0.005;\nball_count = 32;\nshadow_length = 64;\n\np.setup = () => {\n  p.createCanvas(640, 360);\n  p.strokeWeight(8);\n}\n\np.draw = () => {\n  p.background(0);\n  p.translate(p.width/2, p.height/2);\n  p.rotate(p.map(p.noise(x_off), 0, 1, -p.PI, p.PI));\n  \n  x_off += x_step;\n  \n  for (i=0; i<ball_count; i++) {\n    p.beginShape(p.LINES);\n    for (j=0; j<shadow_length; j++) {\n      p.stroke(p.map(j, 0, shadow_length, 0, 255));\n      radius = p.map(p.noise(x_off + x_step * j), 0, 1, 0, p.height/2);\n      p.vertex(radius, 0);\n    }\n    p.endShape();\n    p.rotate(2*p.PI/ball_count);\n  }\n}",
+      "imgFileName": "cyclops.png"
+    },
+    {
+      "title": "Fireworks",
+      "description": "Hey I am a short description!",
+      "code": "class Particle {\n  constructor(pos) {\n    this.pos = pos\n    this.vel = p.createVector(p.random(-1, 1), p.random(-1, 1))\n    this.vel.normalize()\n    this.vel.mult(p.random(0.1, 2))\n  }\n  \n  show() {\n    p.circle(this.pos.x, this.pos.y, 2)\n  }\n  \n  update() {\n    this.pos.add(this.vel)\n  }\n}\n\nclass ParticleSystem {\n  constructor(pos) {\n    this.baseColor = [p.random(255), p.random(255), p.random(255)]\n    this.lifetime = 255\n    this.particles = []\n    for(var i = 0; i < 500; i++) {\n      this.particles.push(new Particle(p.createVector(pos.x, pos.y)))\n    }\n  }\n  \n  update() {\n    this.lifetime -= 2\n    for(var particle of this.particles) {\n      particle.update()\n    }\n  }\n  \n  show() {\n    p.fill(p.color(this.baseColor[0], this.baseColor[1], this.baseColor[2], this.lifetime))\n    for(var particle of this.particles) {\n      particle.show()\n    }\n  }\n}\n\nvar systems = []\nvar counter = 0\n\np.setup = () => {\n  p.createCanvas(640, 360);\n  p.noStroke()\n}\n\np.draw = () => {\n  p.background(0)\n  \n  if(counter == 0) {\n    systems.push(new ParticleSystem(p.createVector(p.random(0, p.width), p.random(0, p.height))))\n    counter = 10\n  }\n  counter -= 1\n  \n  systems = systems.filter(system => system.lifetime >= 0)\n  \n  for(var system of systems) {\n    system.update()\n    system.show()\n  }\n}",
+      "imgFileName": "fireworks.png"
+    }
+  ]
+}
